@@ -9,14 +9,15 @@ fn main() -> anyhow::Result<()> {
     let mut buf = vec![0; n];
     let mut i: u64 = 0;
     let t0 = Instant::now();
+    let mut total = 0u64;
     loop {
         let (size, _src) = socket.recv_from(&mut buf)?;
         assert!(size == buf.len());
+        total += size as u64;
         i += 1;
         if i % 1000 == 0 {
             let elapsed = t0.elapsed();
-            let data = i * (buf.len() as u64);
-            println!("{} {}", i, data as f64 / elapsed.as_secs_f64());
+            println!("{} {}", i, total as f64 / elapsed.as_secs_f64());
         }
     }
     Ok(())

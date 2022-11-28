@@ -8,13 +8,14 @@ fn main() -> anyhow::Result<()> {
     let mut buf = vec![0; n];
     let mut i: u64 = 0;
     let t0 = Instant::now();
+    let mut total = 0u64;
     loop {
         socket.read_exact(&mut buf)?;
         i += 1;
+        total += buf.len() as u64;
         if i % 1000 == 0 {
             let elapsed = t0.elapsed();
-            let data = i * (buf.len() as u64);
-            println!("{} {}", i, data as f64 / elapsed.as_secs_f64());
+            println!("{} {}", i, total as f64 / elapsed.as_secs_f64());
         }
     }
     Ok(())
